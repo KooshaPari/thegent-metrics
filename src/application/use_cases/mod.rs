@@ -2,7 +2,6 @@
 //!
 //! Application services that orchestrate domain logic.
 
-use crate::domain::entities::{Counter, Gauge, Histogram, Summary};
 use crate::domain::events::MetricsEvent;
 use crate::ports::driven::MetricsPort;
 use std::time::SystemTime;

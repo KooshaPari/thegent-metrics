@@ -2,7 +2,6 @@
 //!
 //! Exports metrics in JSON format.
 
-use crate::domain::entities::{Counter, Gauge, Histogram, Summary};
 use crate::ports::driven::MetricsPort;
 use serde::Serialize;
 

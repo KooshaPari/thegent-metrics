@@ -216,7 +216,7 @@ fn main() {
 
         Commands::Inc { name, delta } => {
             // For increment, we need mutable access
-            if let Some(mut counter) = registry.get_counter(&name) {
+            if let Some(counter) = registry.get_counter(&name) {
                 counter.inc(delta);
                 println!("Incremented {} by {}, new value: {}", name, delta, counter.get());
             } else {
@@ -225,7 +225,7 @@ fn main() {
         }
 
         Commands::Set { name, value } => {
-            if let Some(mut gauge) = registry.get_gauge(&name) {
+            if let Some(gauge) = registry.get_gauge(&name) {
                 gauge.set(value);
                 println!("Set {} to {}", name, value);
             } else {
@@ -234,7 +234,7 @@ fn main() {
         }
 
         Commands::Record { name, value } => {
-            if let Some(mut histogram) = registry.get_histogram(&name) {
+            if let Some(histogram) = registry.get_histogram(&name) {
                 histogram.record(value);
                 println!("Recorded {} in {}", value, name);
             } else {
@@ -243,7 +243,7 @@ fn main() {
         }
 
         Commands::Observe { name, value } => {
-            if let Some(mut summary) = registry.get_summary(&name) {
+            if let Some(summary) = registry.get_summary(&name) {
                 summary.observe(value);
                 println!("Observed {} in {}", value, name);
             } else {
