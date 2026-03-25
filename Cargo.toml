@@ -3,6 +3,14 @@ name = "thegent-metrics"
 version = "0.1.0"
 edition = "2021"
 description = "High-performance metrics collection for multi-agent orchestration"
+license = "MIT"
+authors = ["Koosha Pari <kooshapari@kooshapari.com>"]
+repository = "https://github.com/KooshaPari/thegent-metrics"
+keywords = ["metrics", "prometheus", "observability", "telemetry", "monitoring"]
+categories = ["monitoring", "visualization"]
+readme = "README.md"
+documentation = "https://docs.rs/thegent-metrics"
+rust-version = "1.70"
 
 [lib]
 name = "thegent_metrics"
@@ -27,6 +35,7 @@ clap = { version = "4.5", features = ["derive"] }
 [dev-dependencies]
 criterion = "0.5"
 proptest = "1.5"
+cargo-mutants = "25"
 
 [profile.release]
 opt-level = 3
