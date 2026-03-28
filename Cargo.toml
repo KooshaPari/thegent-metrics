@@ -34,7 +34,6 @@ clap = { version = "4.5", features = ["derive"] }
 
 # Shared infrastructure
 helix-tracing = { package = "helix-tracing", path = "../phenotype-tracing" }
-helix-logging = { package = "helix-logging", path = "../phenotype-logger" }
 phenotype-metrics = { path = "../phenotype-metrics" }
 
 [dev-dependencies]
