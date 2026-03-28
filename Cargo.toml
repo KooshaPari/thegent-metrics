@@ -6,10 +6,10 @@ description = "High-performance metrics collection for multi-agent orchestration
 license = "MIT"
 authors = ["Koosha Pari <kooshapari@kooshapari.com>"]
 repository = "https://github.com/KooshaPari/thegent-metrics"
-keywords = ["metrics", "prometheus", "observability", "telemetry", "monitoring"]
-categories = ["monitoring", "visualization"]
+keywords = ["metrics", "prometheus", "observability"]
+categories = ["monitoring"]
 readme = "README.md"
-documentation = "https://docs.rs/thegent-metrics"
+documentation = "https://docs.rs/PulseRs"
 rust-version = "1.70"
 
 [lib]
@@ -31,10 +31,6 @@ parking_lot = "0.12"
 
 # CLI
 clap = { version = "4.5", features = ["derive"] }
-
-# Shared infrastructure
-helix-tracing = { package = "helix-tracing", path = "../phenotype-tracing" }
-phenotype-metrics = { path = "../phenotype-metrics" }
 
 [dev-dependencies]
 criterion = "0.5"
