@@ -1,38 +1,57 @@
+# thegent-metrics Agent Instructions
 
-# Project Instructions
+This file provides guidance to Google Gemini when working with code in this repository.
 
-**This project is managed through AgilePlus.**
+## Project Overview
 
-## AgilePlus Mandate
+thegent-metrics is a Prometheus-compatible metrics collection and observability library for agent orchestration. It provides Counter, Gauge, Histogram, and Summary metric types with resource tracking and performance monitoring capabilities.
 
-All work MUST be tracked in AgilePlus:
-- Reference: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
-- CLI: cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>
+This crate is the canonical observability core for the ecosystem. Simpler registries should reuse shared core abstractions rather than copying them.
 
-## Work Requirements
+## Stack
 
-1. Check for AgilePlus spec before implementing
-2. Create spec for new work: agileplus specify --title "<feature>" --description "<desc>"
-3. Update work package status: agileplus status <feature-id> --wp <wp-id> --state <state>
-4. No code without corresponding AgilePlus spec
+- **Language:** Rust (edition 2021, MSRV 1.70)
+- **Binary name:** thegent-metrics
+- **Library name:** thegent_metrics
+- **Key deps:** serde/serde_json (serialization), dashmap/parking_lot (concurrency), clap (CLI)
+- **Dev deps:** criterion (benchmarks), proptest (property testing), cargo-mutants (mutation testing)
 
-## Branch Discipline
+## Key Paths
 
-- Feature branches in repos/worktrees/<project>/<category>/<branch>
-- Canonical repository tracks main only
-- Return to main for merge/integration checkpoints
+- `src/domain/entities/` — Metric primitives (Counter, Gauge, Histogram, Summary)
+- `src/domain/value_objects/` — Metric metadata types
+- `src/domain/events/` — Domain events
+- `src/ports/driving/` — Inbound ports (metric registration, collection)
+- `src/ports/driven/` — Outbound ports (exporters)
+- `src/adapters/prometheus/` — Prometheus exporter adapter
+- `src/adapters/json/` — JSON exporter adapter
+- `src/application/` — CQRS commands and queries
 
-## UTF-8 Encoding
+## Architecture
 
-All markdown files must use UTF-8. Validate with:
+- Hexagonal/Clean Architecture: Domain → Application → Ports → Adapters
+- Domain is pure — no external dependencies
+- Metric types are composable via a registry pattern
+- Prometheus exporter is the primary export target
+
+## Build and Test
+
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
-agileplus validate-encoding --all --fix
+cargo build --release
+cargo test
+cargo bench
+cargo mutants
+cargo clippy --all-targets -- -D warnings
+cargo fmt --check
 ```
 
-## AgilePlus Reference
+## Kilo Integration
 
-- Specs: AgilePlus/kitty-specs/<feature-id>/
-- Docs: AgilePlus/docs/
-- Workflows: AgilePlus/docs/workflow/
-- Worklog: AgilePlus/.work-audit/worklog.md
+Rig ID: 89600299-c8b5-48cc-9967-6174106aa477
+Town: 78a8d430-a206-4a25-96c0-5cd9f5caf984
+
+Work is tracked via AgilePlus beads. Use gt_prime, gt_done, gt_checkpoint, gt_escalate as needed.
+
+## Child Agent Usage
+
+Use child agents for discovery/verification waves when feasible. Keep edits constrained to the smallest needed file set. Sync updates to this document when behavior changes.
