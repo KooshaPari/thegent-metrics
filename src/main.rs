@@ -3,12 +3,12 @@
 //! Command-line interface for metrics collection.
 
 use clap::{Parser, Subcommand};
+use dashmap::DashMap;
+use std::sync::Arc;
+use thegent_metrics::adapters::json::JsonFormatter;
+use thegent_metrics::adapters::prometheus::PrometheusFormatter;
 use thegent_metrics::domain::entities::{Counter, Gauge, Histogram, Summary};
 use thegent_metrics::ports::driven::MetricsPort;
-use thegent_metrics::adapters::prometheus::PrometheusFormatter;
-use thegent_metrics::adapters::json::JsonFormatter;
-use std::sync::Arc;
-use dashmap::DashMap;
 
 /// Metrics registry using DashMap for thread-safety
 struct Registry {
@@ -110,24 +110,16 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     /// Register a new counter
-    Counter {
-        name: String,
-    },
+    Counter { name: String },
 
     /// Register a new gauge
-    Gauge {
-        name: String,
-    },
+    Gauge { name: String },
 
     /// Register a new histogram
-    Histogram {
-        name: String,
-    },
+    Histogram { name: String },
 
     /// Register a new summary
-    Summary {
-        name: String,
-    },
+    Summary { name: String },
 
     /// Increment a counter
     Inc {
@@ -137,30 +129,19 @@ enum Commands {
     },
 
     /// Set a gauge value
-    Set {
-        name: String,
-        value: f64,
-    },
+    Set { name: String, value: f64 },
 
     /// Record a histogram value
-    Record {
-        name: String,
-        value: u64,
-    },
+    Record { name: String, value: u64 },
 
     /// Observe a summary value
-    Observe {
-        name: String,
-        value: f64,
-    },
+    Observe { name: String, value: f64 },
 
     /// List all metrics
     List,
 
     /// Show a specific metric
-    Show {
-        name: String,
-    },
+    Show { name: String },
 
     /// Export in Prometheus format
     Prometheus,
@@ -169,9 +150,7 @@ enum Commands {
     Json,
 
     /// Delete a metric
-    Delete {
-        name: String,
-    },
+    Delete { name: String },
 
     /// Clear all metrics
     Clear,
@@ -218,7 +197,12 @@ fn main() {
             // For increment, we need mutable access
             if let Some(counter) = registry.get_counter(&name) {
                 counter.inc(delta);
-                println!("Incremented {} by {}, new value: {}", name, delta, counter.get());
+                println!(
+                    "Incremented {} by {}, new value: {}",
+                    name,
+                    delta,
+                    counter.get()
+                );
             } else {
                 eprintln!("Counter '{}' not found", name);
             }
@@ -269,15 +253,26 @@ fn main() {
             println!("\n=== Histograms ===");
             for name in registry.list_histograms() {
                 if let Some(histogram) = registry.get_histogram(&name) {
-                    println!("  {}: count={}, mean={:.2}, p50={:.2}, p99={:.2}",
-                        name, histogram.count(), histogram.mean(), histogram.p50(), histogram.p99());
+                    println!(
+                        "  {}: count={}, mean={:.2}, p50={:.2}, p99={:.2}",
+                        name,
+                        histogram.count(),
+                        histogram.mean(),
+                        histogram.p50(),
+                        histogram.p99()
+                    );
                 }
             }
 
             println!("\n=== Summaries ===");
             for name in registry.list_summaries() {
                 if let Some(summary) = registry.get_summary(&name) {
-                    println!("  {}: count={}, mean={:.2}", name, summary.count(), summary.mean());
+                    println!(
+                        "  {}: count={}, mean={:.2}",
+                        name,
+                        summary.count(),
+                        summary.mean()
+                    );
                 }
             }
         }

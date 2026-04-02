@@ -15,19 +15,19 @@
 //! - **EDA**: Domain events for metric changes
 //! - **TraceDD**: Trace identifiers on all operations
 
-pub mod domain;
-pub mod application;
-pub mod ports;
 pub mod adapters;
+pub mod application;
+pub mod domain;
+pub mod ports;
 
 // Re-export for convenience
-pub use domain::entities::*;
-pub use domain::value_objects::*;
-pub use domain::events::*;
 pub use application::commands::*;
 pub use application::queries::*;
 pub use application::use_cases::*;
-pub use ports::driven::MetricsPort;
+pub use domain::entities::*;
+pub use domain::events::*;
+pub use domain::value_objects::*;
 pub use ports::driven::CounterPort;
 pub use ports::driven::GaugePort;
 pub use ports::driven::HistogramPort;
+pub use ports::driven::MetricsPort;

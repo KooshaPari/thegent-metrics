@@ -1,4 +1,4 @@
 //! # Adapters Layer
 
-pub mod prometheus;
 pub mod json;
+pub mod prometheus;

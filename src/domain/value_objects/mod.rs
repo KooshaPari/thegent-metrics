@@ -16,7 +16,9 @@ impl MetricName {
         let name = name.into();
         assert!(!name.is_empty(), "Metric name cannot be empty");
         assert!(!name.contains(' '), "Metric name cannot contain spaces");
-        Self { name: Arc::new(name) }
+        Self {
+            name: Arc::new(name),
+        }
     }
 
     pub fn as_str(&self) -> &str {

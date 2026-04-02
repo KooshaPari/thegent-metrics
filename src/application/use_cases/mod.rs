@@ -18,7 +18,9 @@ impl<T: MetricsPort, E: FnMut(MetricsEvent)> IncCounterUseCase<T, E> {
     }
 
     pub fn execute(&mut self, name: String, delta: u64) -> Result<u64, String> {
-        let counter = self.registry.get_counter(&name)
+        let counter = self
+            .registry
+            .get_counter(&name)
             .ok_or_else(|| format!("Counter '{}' not found", name))?;
 
         let new_value = counter.get() + delta;
@@ -45,7 +47,9 @@ impl<T: MetricsPort, E: FnMut(MetricsEvent)> SetGaugeUseCase<T, E> {
     }
 
     pub fn execute(&mut self, name: String, value: f64) -> Result<(), String> {
-        let gauge = self.registry.get_gauge(&name)
+        let gauge = self
+            .registry
+            .get_gauge(&name)
             .ok_or_else(|| format!("Gauge '{}' not found", name))?;
 
         gauge.set(value);
@@ -71,7 +75,9 @@ impl<T: MetricsPort, E: FnMut(MetricsEvent)> RecordHistogramUseCase<T, E> {
     }
 
     pub fn execute(&mut self, name: String, value: u64) -> Result<(), String> {
-        let histogram = self.registry.get_histogram(&name)
+        let histogram = self
+            .registry
+            .get_histogram(&name)
             .ok_or_else(|| format!("Histogram '{}' not found", name))?;
 
         histogram.record(value);

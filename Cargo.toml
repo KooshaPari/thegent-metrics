@@ -11,6 +11,8 @@ readme = "README.md"
 documentation = "https://docs.rs/PulseRs"
 rust-version = "1.70"
 
+[workspace]
+
 [lib]
 name = "thegent_metrics"
 path = "src/lib.rs"

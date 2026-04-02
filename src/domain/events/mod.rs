@@ -16,10 +16,7 @@ pub enum MetricsEvent {
     },
 
     /// Counter was reset
-    CounterReset {
-        name: String,
-        timestamp: SystemTime,
-    },
+    CounterReset { name: String, timestamp: SystemTime },
 
     /// Gauge was set
     GaugeSet {

@@ -2,10 +2,10 @@
 //!
 //! Core business objects with identity.
 
-use std::sync::Arc;
-use std::sync::atomic::{AtomicU64, Ordering};
-use parking_lot::Mutex;
 use super::value_objects::MetricName;
+use parking_lot::Mutex;
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::Arc;
 
 /// Counter Entity - Thread-safe incrementing counter
 #[derive(Debug, Clone)]
@@ -159,7 +159,13 @@ impl Histogram {
         // Update min with atomic operations
         loop {
             let current_min = self.data.min.load(Ordering::Relaxed);
-            if value >= current_min || self.data.min.compare_exchange(current_min, value, Ordering::Relaxed, Ordering::Relaxed).is_ok() {
+            if value >= current_min
+                || self
+                    .data
+                    .min
+                    .compare_exchange(current_min, value, Ordering::Relaxed, Ordering::Relaxed)
+                    .is_ok()
+            {
                 break;
             }
         }
@@ -167,7 +173,13 @@ impl Histogram {
         // Update max with atomic operations
         loop {
             let current_max = self.data.max.load(Ordering::Relaxed);
-            if value <= current_max || self.data.max.compare_exchange(current_max, value, Ordering::Relaxed, Ordering::Relaxed).is_ok() {
+            if value <= current_max
+                || self
+                    .data
+                    .max
+                    .compare_exchange(current_max, value, Ordering::Relaxed, Ordering::Relaxed)
+                    .is_ok()
+            {
                 break;
             }
         }
@@ -186,7 +198,11 @@ impl Histogram {
     /// Get the minimum value.
     pub fn min(&self) -> u64 {
         let min = self.data.min.load(Ordering::Relaxed);
-        if min == u64::MAX { 0 } else { min }
+        if min == u64::MAX {
+            0
+        } else {
+            min
+        }
     }
 
     /// Get the maximum value.
@@ -197,13 +213,19 @@ impl Histogram {
     /// Get the mean value.
     pub fn mean(&self) -> f64 {
         let count = self.count();
-        if count == 0 { 0.0 } else { self.sum() as f64 / count as f64 }
+        if count == 0 {
+            0.0
+        } else {
+            self.sum() as f64 / count as f64
+        }
     }
 
     /// Get a percentile value.
     pub fn percentile(&self, p: f64) -> f64 {
         let values = self.data.values.lock();
-        if values.is_empty() { return 0.0; }
+        if values.is_empty() {
+            return 0.0;
+        }
 
         let idx = ((p / 100.0) * values.len() as f64) as usize;
         let idx = idx.min(values.len() - 1);
@@ -268,7 +290,11 @@ impl Summary {
 
     pub fn mean(&self) -> f64 {
         let c = self.count();
-        if c == 0 { 0.0 } else { self.sum() / c as f64 }
+        if c == 0 {
+            0.0
+        } else {
+            self.sum() / c as f64
+        }
     }
 }
 
@@ -335,9 +361,9 @@ mod tests {
         let p50 = hist.p50();
         let p90 = hist.p90();
         let p99 = hist.p99();
-        assert!(p50 >= 50.0 && p50 <= 51.0);
-        assert!(p90 >= 90.0 && p90 <= 91.0);
-        assert!(p99 >= 99.0 && p99 <= 100.0);
+        assert!((50.0..=51.0).contains(&p50));
+        assert!((90.0..=91.0).contains(&p90));
+        assert!((99.0..=100.0).contains(&p99));
     }
 
     #[test]

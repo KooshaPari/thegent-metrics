@@ -53,7 +53,8 @@ pub struct JsonFormatter;
 impl JsonFormatter {
     /// Create a snapshot of the registry
     pub fn snapshot<T: MetricsPort>(registry: &T) -> MetricsSnapshotJson {
-        let counters = registry.list_counters()
+        let counters = registry
+            .list_counters()
             .into_iter()
             .filter_map(|name| {
                 registry.get_counter(&name).map(|c| CounterJson {
@@ -63,7 +64,8 @@ impl JsonFormatter {
             })
             .collect();
 
-        let gauges = registry.list_gauges()
+        let gauges = registry
+            .list_gauges()
             .into_iter()
             .filter_map(|name| {
                 registry.get_gauge(&name).map(|g| GaugeJson {
@@ -73,7 +75,8 @@ impl JsonFormatter {
             })
             .collect();
 
-        let histograms = registry.list_histograms()
+        let histograms = registry
+            .list_histograms()
             .into_iter()
             .filter_map(|name| {
                 registry.get_histogram(&name).map(|h| HistogramJson {
@@ -90,7 +93,8 @@ impl JsonFormatter {
             })
             .collect();
 
-        let summaries = registry.list_summaries()
+        let summaries = registry
+            .list_summaries()
             .into_iter()
             .filter_map(|name| {
                 registry.get_summary(&name).map(|s| SummaryJson {
